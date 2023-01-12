@@ -222,7 +222,7 @@ let addEmployee = [
     {
         //asking for the employee's position
         type: 'list',
-        name: 'position',
+        name: 'pos',
         message: 'Please Enter The Employee\'s Position: ',
         choices: () => {
             var array = [];
@@ -237,7 +237,7 @@ let addEmployee = [
         //asking for the employee's manager
         type: 'input',
         name: 'manager',
-        message: 'Please Enter The Employee\'s Manager: ',
+        message: 'Please Enter The Employee\'s Manager\'s Name: ',
         validate: managerInput => {
             if (managerInput) {
                 return true;
@@ -257,8 +257,8 @@ let updateEmployee = [
         message: 'Please Select An Employee: ',
         choices: () => {
             var array = [];
-            for (var i = 0; i < res.length; i++) {
-                array.push(res[i].last_name);
+            for (var i = 0; i < posi.length; i++) {
+                array.push(posi[i].last_name);
             }
             var employeeArray = [...new Set(array)];
             return employeeArray;
