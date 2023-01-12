@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS pos;
 CREATE TABLE pos (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(30),
-    salary DECIMAL,
+    salary INTEGER,
     department_id INTEGER
 );
 

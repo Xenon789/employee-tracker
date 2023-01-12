@@ -2,6 +2,9 @@ const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const db = require('./db/connection');
 
+let dept;
+let posi;
+
 //connects to database
 db.connect(err => {
     if (err) throw err;
@@ -32,9 +35,9 @@ db.connect(err => {
                 });
             } else if (answers.startingPrompt === 'Add Department') {
                 inquirer.prompt(addDepartment).then((answers) => {
-                    db.query(`INSERT INTO department (name) VALUES (?)`, [answers.department], (err, res) => {
+                    db.query(`INSERT INTO department (name) VALUES (?)`, [answers.deptName], (err, res) => {
                         if (err) throw err;
-                        console.log(`Added ${answers.department} to the database.`)
+                        console.log(`Added ${answers.deptName} to the database.`)
                         employeeTracker();
                     });
                 })
@@ -42,15 +45,16 @@ db.connect(err => {
                 //querying the database for positions in department
                 db.query(`SELECT * FROM department`, (err, res) => {
                     if (err) throw err;
+                    dept = res;
     
                     inquirer.prompt(addPosition).then((answers) => {
                         for (var i = 0; i < res.length; i++) {
-                            if (res[i].name === answers.deptName) {
+                            if (res[i].name === answers.pos) {
                                 var department = res[i];
                             }
                         }
     
-                        db.query(`INSERT INTO pos (title, salary, department_id) VALUES (?, ?, ?)`, [answers.pos, answers.salary, department.id], (err, res) => {
+                        db.query(`INSERT INTO pos (title, salary, department_id) VALUES (?, ?, ?)`, [answers.pos, answers.salary, answers.deptName], (err, res) => {
                             if (err) throw err;
                             console.log(`Added ${answers.pos} to the database.`)
                             employeeTracker();
@@ -61,6 +65,7 @@ db.connect(err => {
                 //calling the database to acquire the positions and managers
                 db.query(`SELECT * FROM employee, pos`, (err, res) => {
                     if (err) throw err;
+                    posi = res;
     
                     inquirer.prompt(addEmployee).then((answers) => {
                         //comparing the res and storing it into the variable
@@ -81,6 +86,7 @@ db.connect(err => {
                 //calling the database to acquire the positions and managers
                 db.query(`SELECT * FROM employee, pos`, (err, res) => {
                     if (err) throw err;
+                    posi = res;
     
                     inquirer.prompt(updateEmployee).then((answers) => {
                         //comparing the res and storing it into the variable
@@ -174,8 +180,8 @@ let addPosition = [
         message: 'Please Enter The Department For The Position: ',
         choices: () => {
             var array = [];
-            for (var i = 0; i < res.length; i++) {
-                array.push(res[i].name);
+            for (var i = 0; i < dept.length; i++) {
+                array.push(dept[i].name);
             }
             return array;
         }
@@ -218,8 +224,8 @@ let addEmployee = [
         message: 'Please Enter The Employee\'s Position: ',
         choices: () => {
             var array = [];
-            for (var i = 0; i < res.length; i++) {
-                array.push(res[i].title);
+            for (var i = 0; i < posi.length; i++) {
+                array.push(posi[i].title);
             }
             var newArray = [...new Set(array)];
             return newArray;
@@ -263,8 +269,8 @@ let updateEmployee = [
         message: 'Please Enter The Employee\'s New Position: ',
         choices: () => {
             var array = [];
-            for (var i = 0; i < res.length; i++) {
-                array.push(res[i].title);
+            for (var i = 0; i < posi.length; i++) {
+                array.push(posi[i].title);
             }
             var newArray = [...new Set(array)];
             return newArray;
