@@ -46,15 +46,17 @@ db.connect(err => {
                 db.query(`SELECT * FROM department`, (err, res) => {
                     if (err) throw err;
                     dept = res;
+
+                    console.log(res);
     
                     inquirer.prompt(addPosition).then((answers) => {
                         for (var i = 0; i < res.length; i++) {
-                            if (res[i].name === answers.pos) {
+                            if (res[i].name === answers.deptName) {
                                 var department = res[i];
                             }
                         }
     
-                        db.query(`INSERT INTO pos (title, salary, department_id) VALUES (?, ?, ?)`, [answers.pos, answers.salary, answers.deptName], (err, res) => {
+                        db.query(`INSERT INTO pos (title, salary, department_id) VALUES (?, ?, ?)`, [answers.pos, answers.salary, department.id], (err, res) => {
                             if (err) throw err;
                             console.log(`Added ${answers.pos} to the database.`)
                             employeeTracker();
