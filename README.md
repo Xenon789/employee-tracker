@@ -20,6 +20,7 @@ This project keeps track of employee, departments, positions, and managers.
     
 ## Installation
 Please use ```npm i``` to install node modules and run the schema.sql file into your sql server.
+To install the code please copy the ssh/https links by the code button and run this commands: ```git clone \<ssh/https\>```
     
 ## Usage
 ```node index.js```
@@ -29,8 +30,9 @@ Please use ```npm i``` to install node modules and run the schema.sql file into 
     
 ## Contributors
 
-    
-## Tests 
+The following video shows an example of the application being used from the command line:
+
+[![A video thumbnail shows the command-line employee management application with a play button overlaying the view.](./Assets/12-sql-homework-video-thumbnail.png)](https://2u-20.wistia.com/medias/2lnle7xnpk)
 
     
 ## Questions
